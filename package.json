@@ -10,11 +10,14 @@
     "dev": "concurrently \"npm run dev --workspace=server\" \"npm run dev --workspace=client\"",
     "dev:server": "npm run dev --workspace=server",
     "dev:client": "npm run dev --workspace=client",
-    "build": "npm run db:generate --workspace=server && npm run build --workspace=client && node -e \"const fs=require('fs'); try{if(fs.existsSync('client/dist') && !fs.existsSync('dist')) fs.cpSync('client/dist', 'dist', {recursive:true});}catch(e){}\"",
-    "vercel-build": "npm run db:generate --workspace=server && npm run build --workspace=client && node -e \"const fs=require('fs'); try{if(fs.existsSync('client/dist') && !fs.existsSync('dist')) fs.cpSync('client/dist', 'dist', {recursive:true});}catch(e){}\"",
-    "db:generate": "npm run db:generate --workspace=server",
+    "build": "(npx prisma generate --schema=server/prisma/schema.prisma || true) && npm run build --workspace=client && node -e \"const fs=require('fs'); try{if(fs.existsSync('client/dist') && !fs.existsSync('dist')) fs.cpSync('client/dist', 'dist', {recursive:true});}catch(e){}\"",
+    "vercel-build": "(npx prisma generate --schema=server/prisma/schema.prisma || true) && npm run build --workspace=client && node -e \"const fs=require('fs'); try{if(fs.existsSync('client/dist') && !fs.existsSync('dist')) fs.cpSync('client/dist', 'dist', {recursive:true});}catch(e){}\"",
+    "db:generate": "prisma generate --schema=server/prisma/schema.prisma",
     "db:push": "npm run db:push --workspace=server",
     "db:seed": "npm run db:seed --workspace=server"
+  },
+  "dependencies": {
+    "prisma": "^5.22.0"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
